@@ -1,0 +1,146 @@
+libteamd:
+https://github.com/jpirko/libteam/wiki
+https://github.com/jpirko/libteam/wiki/Infrastructure-Specification
+
+静态lag
+https://github.com/sonic-net/SONiC/blob/6e36529f92ad54ee950a14a5d0fc391086771f5d/doc/lag/Static%20Port%20Channel%20Design%20Document.md
+
+动态lag
+https://github.com/sonic-net/SONiC/blob/5039feeccb63e1dad0c1e429d53485210bcdffaf/doc/lag/LACP%20Fallback%20Feature%20for%20SONiC_v0.5.md
+fallback：https://github.com/sonic-net/sonic-buildimage/pull/10823
+
+lag hash/流量负载均衡
+https://github.com/sonic-net/SONiC/pull/1501
+
+vxlan 	QINQ
+https://github.com/opencomputeproject/SAI/blob/master/doc/SAI-Proposal-QinQ-VXLAN.md
+华为：https://info.support.huawei.com/info-finder/encyclopedia/zh/QinQ.html
+华为qinq配置实例：https://support.huawei.com/enterprise/zh/doc/EDOC1100410518/978d67a5?idPath=24030814|21782164|21782167|259602657
+
+stp:
+https://github.com/sonic-net/SONiC/pull/386
+rfc: stp for iccp https://rfc2cn.com/rfc7727.html
+https://cloud.tencent.com/developer/article/2165663
+https://cloud.tencent.com/developer/article/2291116
+
+rstp:
+https://blog.csdn.net/2301_76170756/article/details/133863638
+https://www.cnblogs.com/liujunjun/p/13489036.html
+
+mstp:
+https://github.com/sonic-net/SONiC/blob/master/doc/MSTP/MSTP.md
+https://github.com/sonic-net/SONiC/pull/1761  需要pvst代码merged
+
+https://www.h3c.com/cn/d_200805/605864_30003_0.htm
+https://support.huawei.com/enterprise/zh/doc/EDOC1100064394/19e68710
+
+
+mac:
+静态mac/以及动态fdb老化时间配置：https://github.com/sonic-net/sonic-swss/pull/1731
+
+二层转发增强
+https://github.com/anilkpandey/SONiC/blob/8497bc5c2963c14c581cf46a52ade39a3a5aa9e3/doc/layer2-forwarding-enhancements/SONiC%20Layer%202%20Forwarding%20Enhancements%20HLD.md
+https://github.com/sonic-net/SONiC/pull/379
+
+内核fdb老化时间：/sys/class/net/Bridge/ageing_time
+
+igmp snoopin:
+https://github.com/sonic-net/SONiC/pull/426
+https://github.com/sonic-net/sonic-swss/pull/1211
+
+sonic-net/sonic-buildimage#4213
+sonic-net/sonic-buildimage#4489
+#1211
+sonic-net/sonic-swss-common#331
+sonic-net/sonic-utilities#827
+https://github.com/sonic-net/sonic-swss/pull/1211
+benzeerbava/sonic-l2mcd#1
+benzeerbava/sonic-l2mcd#2
+benzeerbava/sonic-l2mcd#3
+benzeerbava/sonic-l2mcd#4
+benzeerbava/sonic-l2mcd#5
+benzeerbava/sonic-l2mcd#6
+benzeerbava/sonic-l2mcd#7
+benzeerbava/sonic-l2mcd#8
+benzeerbava/sonic-l2mcd#9
+benzeerbava/sonic-l2mcd#10
+benzeerbava/sonic-l2mcd#11
+benzeerbava/sonic-l2mcd#12
+benzeerbava/sonic-l2mcd#13
+benzeerbava/sonic-l2mcd#14
+benzeerbava/sonic-l2mcd#15
+benzeerbava/sonic-l2mcd#16
+benzeerbava/sonic-l2mcd#17
+benzeerbava/sonic-l2mcd#18
+
+mld snooping:
+https://datatracker.ietf.org/doc/html/rfc2710
+https://datatracker.ietf.org/doc/html/rfc3810
+
+arp
+arp代理
+https://github.com/sonic-net/SONiC/blob/master/doc/arp/Proxy%20Arp.md
+https://github.com/sonic-net/sonic-utilities/pull/1168
+https://github.com/sonic-net/sonic-swss/pull/2334	
+
+免费arp
+https://github.com/sonic-net/sonic-swss/pull/1503
+
+arp老化时间：
+sudo echo 800000 > /proc/sys/net/ipv4/neigh/default/gc_stale_time
+sudo echo 800000 > /proc/sys/net/ipv4/neigh/eth0/gc_stale_time
+
+
+流控：
+/**
+ * @brief Attribute data for #SAI_PORT_ATTR_GLOBAL_FLOW_CONTROL_MODE
+ */
+typedef enum _sai_port_flow_control_mode_t
+{
+    /** Disable flow control for both tx and rx */
+    SAI_PORT_FLOW_CONTROL_MODE_DISABLE,
+
+    /** Enable flow control for tx only */
+    SAI_PORT_FLOW_CONTROL_MODE_TX_ONLY,
+
+    /** Enable flow control for rx only */
+    SAI_PORT_FLOW_CONTROL_MODE_RX_ONLY,
+
+    /** Enable flow control for both tx and rx */
+    SAI_PORT_FLOW_CONTROL_MODE_BOTH_ENABLE,
+
+} sai_port_flow_control_mode_t;
+
+/**
+ * @brief Priority flow control mode， for #SAI_PORT_ATTR_PRIORITY_FLOW_CONTROL_MODE
+ */
+typedef enum _sai_port_priority_flow_control_mode_t
+{
+    /** Same value for RX/TX */
+    SAI_PORT_PRIORITY_FLOW_CONTROL_MODE_COMBINED,
+
+    /** Separate values for RX/TX */
+    SAI_PORT_PRIORITY_FLOW_CONTROL_MODE_SEPARATE,
+
+} sai_port_priority_flow_control_mode_t;
+
+/**
+ * @brief Query port supported flow control mode
+ *
+ * @type sai_port_flow_control_mode_t
+ * @flags READ_ONLY
+ */
+SAI_PORT_ATTR_SUPPORTED_FLOW_CONTROL_MODE,
+
+
+/**
+ * @brief Forward or terminate the global flow control(802.3X) frame
+ *
+ * If true, flow control frames are switched between ports.
+ * If false, flow control frames are terminated by the switch.
+ *
+ * @type bool
+ * @flags CREATE_AND_SET
+ * @default false
+ */
+SAI_PORT_ATTR_GLOBAL_FLOW_CONTROL_FORWARD,
