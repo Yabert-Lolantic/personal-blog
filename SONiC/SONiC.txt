@@ -144,3 +144,15 @@ SAI_PORT_ATTR_SUPPORTED_FLOW_CONTROL_MODE,
  * @default false
  */
 SAI_PORT_ATTR_GLOBAL_FLOW_CONTROL_FORWARD,
+
+
+sflow：流量监控
+https://github.com/sonic-net/SONiC/pull/1268
+https://www.cnblogs.com/jianhaoscnu/articles/12779116.html
+https://sflow-rt.com/download.php
+sudo apt-get install openjdk-8-jdk
+http://192.168.75.128:8008/  #192.168.75.128运行 start.sh的服务器ip
+
+
+端口镜像：
+https://github.com/sonic-net/SONiC/pull/580
