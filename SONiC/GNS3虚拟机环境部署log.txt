@@ -1,0 +1,53 @@
+虚拟机vmware搭建gns3
+
+虚拟机上操作：
+
+1.vm安装ubuntu 22.04 处理器选择配置中选择开启虚拟化
+2.apt install open-vm-tools (可选)
+3.appsoft 换源阿里(可选)
+4.部署环境gns2环境
+	apt update
+	apt upgrade
+	apt full-upgrade
+	apt-get install qemu-kvm  -y
+	apt-get install vim -y
+	apt-get install -y libvirt-daemon-system
+	apt-get install -y libvirt-clients
+	apt-get install -y bridge-utils
+	apt-get install -y wireshark 
+	apt-get install -y putty
+	apt-get install -y ubridge
+	sudo add-apt-repository ppa:gns3/ppa
+	sudo apt update
+	sudo apt install gns3-gui gns3-server
+	apt install net-tools -y
+
+
+5.安装docker
+	sudo apt install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release -y
+	curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+	sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+	sudo apt update
+	sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+	sudo docker version
+
+	for g in ubridge libvirt kvm wireshark docker; do
+		sudo usermod -aG $g <name>
+	done
+
+
+编译服务器上的操作：
+
+6.将编译出sonic-vs.img.gz 复制至src/platform/vs/并解压
+7.chmod +x sonic-gns3a.sh
+9.执行./sonic-gns3a.sh
+10.将生成的SONiC-latest.gns3a和sonic-vs.img 复制至GNS虚拟机任意目录
+
+
+GNS虚拟机上操作：
+11.任意目录运行gns3
+12.New blank project创建工程
+13.file -> import appliance导入SONiC-latest.gns3a
+14.点击左边栏倒数第二个图标，将SONiC latest拖至中央空白区，创建sonic设备
+15.右键点击中央sonic图标，start开始，再右键选择Custom console打开sonic设备操作界面
