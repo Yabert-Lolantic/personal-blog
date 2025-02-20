@@ -1,0 +1,18 @@
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+from scapy.contrib.igmp import IGMP
+import time
+
+target_ip = "224.50.50.50"
+dst_ip = "224.0.0.1" # IGMPv1通常使用224.0.0.1作为组播地址
+
+vlan_id = 20
+
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+igmp_packet = IP(dst=dst_ip, ttl=1) / IGMP(type=0x12, gaddr=target_ip)
+
+packet = ether_frame / igmp_packet
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)
+

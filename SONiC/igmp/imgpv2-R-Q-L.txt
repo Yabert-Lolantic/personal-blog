@@ -1,0 +1,78 @@
+发送 IGMPv2 Membership Report
+----------------------------------------------------------------------------------------------------------
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+from scapy.contrib.igmp import IGMP
+import time
+
+target_ip = "224.60.60.60"
+dst_ip = "224.0.0.1" # IGMPv1通常使用224.0.0.1作为组播地址
+
+vlan_id = 20
+
+# 创建 IGMPv2 Membership Report 报文
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+ip_packet = IP(dst=dst_ip, ttl=1)
+router_alert_option = b'\x94\x04\x00\x00'
+ip_packet.options = router_alert_option
+igmp_packet = ip_packet / IGMP(type=0x16, gaddr=target_ip)
+
+packet = ether_frame / igmp_packet
+
+# 发送报文
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)
+
+
+发送 IGMPv2 Query Group
+----------------------------------------------------------------------------------------------------------
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+from scapy.contrib.igmp import IGMP
+import time
+
+target_ip = "0.0.0.0" 	# 0.0.0.0，表示查询所有组播
+dst_ip = "224.0.0.1" 	# IGMPv1通常使用224.0.0.1作为组播地址
+
+vlan_id = 20
+
+# 创建 IGMPv2 Membership Report 报文
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+ip_packet = IP(dst=dst_ip, ttl=1)
+router_alert_option = b'\x94\x04\x00\x00'
+ip_packet.options = router_alert_option
+igmp_packet = ip_packet / IGMP(type=0x11, gaddr=target_ip)
+packet = ether_frame / igmp_packet
+
+# 发送报文
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)
+
+
+发送 IGMPv2 Leave Group
+----------------------------------------------------------------------------------------------------------
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+from scapy.contrib.igmp import IGMP
+import time
+
+# 定义目标组播地址和网络接口
+target_ip = "224.60.60.60"  # 组播地址
+dst_ip = "224.0.0.2"
+
+vlan_id = 20
+
+# 创建 IGMPv2 Leave Group 报文
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+ip_packet = IP(dst=dst_ip, ttl=1)
+router_alert_option = b'\x94\x04\x00\x00'
+ip_packet.options = router_alert_option
+igmp_packet = ip_packet / IGMP(type=0x17, gaddr=target_ip)
+packet = ether_frame / igmp_packet
+
+# 发送报文
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)

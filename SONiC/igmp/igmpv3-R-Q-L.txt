@@ -1,0 +1,119 @@
+发送 IGMPv3 Membership Report
+----------------------------------------------------------------------------------------------------------
+
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+import time
+from scapy.contrib.igmpv3 import IGMPv3, IGMPv3mr, IGMPv3gr
+
+# 定义目标组播地址和网络接口
+target_ip = "224.70.70.70"  # 组播地址
+source_ip = ["192.168.1.90", "192.168.1.91", "192.168.1.92", "192.168.1.93", "192.168.1.94",
+		     "192.168.1.95", "192.168.1.96", "192.168.1.97", "192.168.1.98", "192.168.1.99"]
+dst_ip = "224.0.0.22"
+vlan_id = 20
+
+# 创建 IGMPv3 Membership Report 报文
+# 1:"Mode Is Include
+# 2:"Mode Is Exclude"
+# 3:"Change To Include Mode"
+# 4:"Change To Exclude Mode
+# 5:"Allow New Sources"
+# 6:"Block old Sources"
+
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+ip_packet = IP(dst=dst_ip, ttl=1)
+router_alert_option = b'\x94\x04\x00\x00'
+ip_packet.options = router_alert_option
+igmp_packet = ip_packet / IGMPv3(type=0x22) / IGMPv3mr(
+    numgrp=1,  # 组记录的数量
+    records=[
+        IGMPv3gr(
+            rtype=1,  # MODE_IS_INCLUDE
+			numsrc=10,
+            maddr=target_ip,  # 组播组地址
+            srcaddrs=source_ip  # 源地址列表
+        )
+    ]
+)
+packet = ether_frame / igmp_packet
+
+# 发送报文
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)
+	
+	
+发送 IGMPv3 Query Group
+----------------------------------------------------------------------------------------------------------
+
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+import time
+from scapy.contrib.igmpv3 import IGMPv3, IGMPv3mq
+
+# 定义目标组播地址和网络接口
+dst_ip = "224.0.0.1"
+vlan_id = 20
+
+# 创建 IGMPv3 Query Group 报文
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+ip_packet = IP(dst=dst_ip, ttl=1)
+router_alert_option = b'\x94\x04\x00\x00'
+ip_packet.options = router_alert_option
+igmp_packet = ip_packet / IGMPv3(type=0x11) / IGMPv3mq(
+													gaddr="0.0.0.0",
+													numsrc=0,
+													srcaddrs=None)
+
+packet = ether_frame / igmp_packet
+
+# 发送报文
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)
+	
+	
+	
+发送 IGMPv3 Leave Group
+----------------------------------------------------------------------------------------------------------
+
+from scapy.all import Ether, IP, Dot1Q, TCP, sendp, ICMP
+import time
+from scapy.contrib.igmpv3 import IGMPv3, IGMPv3mr, IGMPv3gr
+
+# 定义目标组播地址和网络接口
+target_ip = "224.70.70.70"  # 组播地址
+dst_ip = "224.0.0.22"
+vlan_id = 20
+
+# 创建 IGMPv3 Membership Report 报文
+# 1:"Mode Is Include
+# 2:"Mode Is Exclude"
+# 3:"Change To Include Mode"
+# 4:"Change To Exclude Mode
+# 5:"Allow New Sources"
+# 6:"Block old Sources"
+
+ether_frame = Ether(dst="01:00:5e:22:22:22", src="00:11:00:00:00:00") / Dot1Q(vlan=vlan_id)
+ip_packet = IP(dst=dst_ip, ttl=1)
+router_alert_option = b'\x94\x04\x00\x00'
+ip_packet.options = router_alert_option
+igmp_packet = ip_packet / IGMPv3(type=0x22) / IGMPv3mr(
+    numgrp=1,  # 组记录的数量
+    records=[
+        IGMPv3gr(
+            rtype=3,
+			numsrc=0,
+            maddr=target_ip,  # 组播组地址
+            srcaddrs=[]  # 源地址列表
+        )
+    ]
+)
+packet = ether_frame / igmp_packet
+
+# 发送报文
+#for i in range(0, 3):
+while True:
+    sendp(packet, iface="Ethernet0")
+    time.sleep(1)
